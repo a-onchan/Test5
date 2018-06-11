@@ -1,0 +1,59 @@
+package sbpayment.jp.intro;
+
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;// JDBCテンプレート宣言
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+@Controller  //Ctrl+shift+Oでimportできる
+public class dbtestController {
+
+    // JDBCテンプレート宣言
+    @Autowired//アノテーション・・・コードでは表現しきれない情報を、補足としてつけ加えられる
+    private JdbcTemplate jdbc;//教える①
+    
+    
+    
+    @GetMapping("/top") // 最初の状態
+    public String top(Model model) {
+//        model.addAttribute("name", "初期値");
+//        model.addAttribute("age", 0);
+       
+            
+        //jdbc.update("INSERT INTO DBTest(age,name) VALUES(?,?)",10,"大西");//INSERTする
+        
+        return "top";
+    }
+    
+    @GetMapping("/form")
+    public String sample(String name, int age, Model model) {
+
+    model.addAttribute("name", name);
+    model.addAttribute("age", age);
+    jdbc.update("INSERT INTO DBTest(age,name) VALUES(?,?)",age,name);//INSERTする　教える②
+//    List<Map<String, Object>> list = jdbc.queryForList("SELECT * FROM DBTest WHERE name IS NOT null");
+//    model.addAttribute("dbtest",list.get(0).get(age));
+//    model.addAttribute("dbtest",jdbc.queryForMap("SELECT * FROM DBTest WHERE name IS NOT null").get("age"));
+//    model.addAttribute("dbtest",jdbc.queryForList("SELECT * FROM DBTest WHERE name IS NOT null"));//教える③
+//    model.addAttribute("dbtest",jdbc.queryForList("SELECT * FROM DBTest WHERE name IS NOT null").get(0));//0番目
+//    model.addAttribute("dbtest",jdbc.queryForList("SELECT * FROM DBTest WHERE name IS NOT null").get(0).get("age"));//教え
+      model.addAttribute("dbtests", jdbc.queryForList("SELECT * FROM DBTest WHERE name IS NOT null"));//これ　最後
+    
+    return "top";
+    }
+    
+    @PostMapping("/post")
+    public String Post(String name, int age,RedirectAttributes attr){
+        attr.addFlashAttribute("name", name);
+        attr.addFlashAttribute("age", age);
+        return "redirect:/top";
+    }
+    
+
+}
