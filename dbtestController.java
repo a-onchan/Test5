@@ -13,7 +13,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller  //Ctrl+shift+Oでimportできる
 public class dbtestController {
-
+　　//変更
     // JDBCテンプレート宣言
     @Autowired//アノテーション・・・コードでは表現しきれない情報を、補足としてつけ加えられる
     private JdbcTemplate jdbc;//教える①
